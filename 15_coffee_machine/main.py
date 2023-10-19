@@ -1,4 +1,5 @@
 import menu
+import sys
 
 power_status_on = True
 
@@ -11,7 +12,11 @@ def off():
 
 # TODO: 3. Print report.
 def report():
-    print(menu.resources)
+    water = menu.resources["water"]
+    milk = menu.resources["milk"]
+    coffee = menu.resources["coffee"]
+
+    print(f"Remaining Resources:\nWater: {water}ml \nMilk: {milk}ml \nCoffee: {coffee}g")
 
 
 # TODO: 4. Check resources sufficient?
@@ -38,13 +43,13 @@ def check_resources():
 
     if water > r_water:
         print('not enough water.')
-        return
+        sys.exit()
     elif milk > r_milk:
         print('Not enough milk.')
-        return
+        sys.exit()
     elif coffee > r_coffee:
         print('Not enough coffee.')
-        return  
+        sys.exit()  
 
 
 # TODO: 5. Process coins.
@@ -72,6 +77,24 @@ def process_coins():
 
     return tender_amount
 
+# TODO: 7. Make Coffee.
+def make_coffee():
+    # REMOVE RESOURCES
+    for key in menu.MENU[user_input]["ingredients"]:
+        reserves_value = menu.resources[key]
+        resources_used = menu.MENU[user_input]["ingredients"][key]
+        resources_left = reserves_value - resources_used
+
+        menu.resources[key] = resources_left
+        # print(resources_left)
+        # print(menu.resources)
+
+        # print(menu.MENU[user_input]["ingredients"][key])
+    
+    print("Dispensing Coffee, Enjoy!")
+    report()
+    print(f"Money: {tender_amount:.2f}")
+
 
 
 # TODO: 1. Prompt user by asking “What would you like? (espresso/latte/cappuccino):”
@@ -87,7 +110,8 @@ while power_status_on == True:
 
     for key in menu.MENU:
         if user_input == key:
-            check_resources()    
+            check_resources() 
+
 
 # TODO: 6. Check transaction successful?
     item_cost = menu.MENU[user_input]["cost"]
@@ -104,5 +128,4 @@ while power_status_on == True:
         print(f"Making Coffee")
         print(f"amount refunded: {refund_amt:.2f}")
 
-
-# TODO: 7. Make Coffee.
+    make_coffee()
