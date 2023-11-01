@@ -22,9 +22,20 @@ if user_input == "report":
     coffee_maker.report()
     money_machine.report()
 
-# CHECK IF RESOURCES ARE SUFFICIENT
-user_order = menu.find_drink(user_input)
-# menu_item = MenuItem(menu.menu[name])
-print(user_order.menu)
 
+try:
+    # CREATE OBJECT - CUSTOMER'S DRINK
+    customer_drink = menu.find_drink(user_input)
+    
+    # CHECK IF RESOURCES ARE SUFFICIENT
+    sufficient_resources = coffee_maker.is_resource_sufficient(customer_drink)
 
+    # PROCESS COINS
+    print(f"${customer_drink.cost}: ")
+    customer_payment = money_machine.make_payment(customer_drink.cost)
+
+    # MAKE COFFEE   
+    coffee_maker.make_coffee(customer_drink)
+
+except:
+    print('Try again')
